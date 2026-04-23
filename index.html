@@ -108,7 +108,7 @@
     W A D — Bewegen<br>
     MAUS — Umsehen<br>
     LEERTASTE — Bogen schießen<br>
-    Q oder E — Schwertangriff<br>
+    LINKE MAUSTASTE — Schwertangriff<br>
     SHIFT — Rennen
   </div>
   <button id="start-btn">SPIELEN</button>
@@ -300,7 +300,11 @@ document.addEventListener('mousemove', e => {
 
 document.addEventListener('click', e => {
   if (gameStarted && player.alive) {
-    renderer.domElement.requestPointerLock();
+    if (document.pointerLockElement === renderer.domElement) {
+      if (e.button === 0) swingSword();
+    } else {
+      renderer.domElement.requestPointerLock();
+    }
   }
 });
 
@@ -510,7 +514,6 @@ function gameLoop() {
   if (player.recoil > 0) player.recoil = Math.max(0, player.recoil - dt * 8);
 
   if (shooting) shootBow();
-  if (keys['KeyQ'] || keys['KeyE']) swingSword();
 
   camera.rotation.order = 'YXZ';
   camera.rotation.y = yaw;
